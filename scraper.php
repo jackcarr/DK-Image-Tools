@@ -32,7 +32,7 @@
 			$dir = "./data/output/";
 			$csv_path = "./data/csv/pois.csv";
 			$spread = parseCsv($csv_path);
-			$files = $processed_files = array();
+			
 			$tally = 0;
 
 			br();
@@ -282,7 +282,7 @@
 					}
 					
 				}
-				// echo '<h3>Processed <strong>' . $tally . '</strong> images.</h3>';
+
 				if (isset($processed_files) && is_array($processed_files)) {
 
 					foreach ($processed_files as $value) {
@@ -302,3 +302,14 @@
 				<br />
 			</form>
 			<!-- /Reads, analyses and conform EXIF data -->
+
+
+
+
+
+
+
+
+
+
+

@@ -3,9 +3,9 @@ session_start();
 
 ini_set("memory_limit","1000M");
 
-// ini_set('display_errors',1);
-// ini_set('display_startup_errors',1);
-// error_reporting(-1);
+ini_set('display_errors',1);
+ini_set('display_startup_errors',1);
+error_reporting(-1);
 $time_pre = microtime(true);
 
 if (isset($_POST['zip-array'])) {
@@ -66,6 +66,7 @@ include ('./assets/exif/get_ps_thumb.php');
 		}
 	});
 
+
 	// Enables selecting of all checkboxs which share a class 
 	$('#selectall').click(function () {
 		$('.use_file').prop('checked', this.checked);
@@ -108,7 +109,8 @@ include ('./assets/exif/get_ps_thumb.php');
 
 				<div class="white-box">
 					<?php
-					echo folder_selector();
+					$glow = 'glow';
+					echo folder_selector('glow');
 					?>
 				</div>
 			</div>

@@ -2,24 +2,8 @@
 if (isset($_POST['rename-images'])){
 					if(file_exists($csv_path))
 					{
-						echo '<div class="group clear">';
-						
-						$dir = "./data/images/";
-
-
-
-						foreach (parseCsv($csv_path) as $entry) {
-						// foreach ($csv_array as $entry) {
-						// $process = $_POST['use_file'];
-
-						//
-						// $process replaces the normal csv parser with the input from the file list form
-						//
-
-						// foreach ($process as $entry) {
-
-
-
+						$output .= '<div class="group clear">';
+						foreach ($csv as $entry) {
 							if (isset($entry['number']) && $entry['number'] !== 0 && isset($entry ['SEO file name']) && $entry ['SEO file name'] !== '')
 							{
 								$spread_file_name = $entry ['SEO file name'];
@@ -136,8 +120,6 @@ if (isset($_POST['rename-images'])){
 														$entry['number'] = str_replace('_', '-', $entry['number']);
 														if (file_exists($dir.$image_file) && $processed !== 1)
 														{
-															echo 'should be ok';
-															echo 'spread_file_name: ' . $spread_file_name;
 															if (rename ($dir . $image_file, 'data/output/' . $spread_file_name))
 															{
 																array_push($success_log, array('image_file'=>$image_file, 'spread_file'=>$spread_file_name));
@@ -225,7 +207,7 @@ if (isset($_POST['rename-images'])){
 
 						if (count($image_count)>0)
 						{
-							echo '</p>Processed ' . count($image_count) . ' images in ' . $exec_time . ' seconds.</p>';
+							$output .= '</p>Processed ' . count($image_count) . ' images in ' . $exec_time . ' seconds.</p>';
 						}
 
 
@@ -241,15 +223,15 @@ if (isset($_POST['rename-images'])){
 							if ($error_log)
 							{	
 								// echo '<div class="group clear">';
-								echo 'The following images failed to process:<br /><br />';
+								$output .= 'The following images failed to process:<br /><br />';
 								foreach ($error_log as $value) {
-									echo '<p><img src="./assets/not-ok.png" alt="Error"><strong>' . $value . '</strong> failed to process.</p>';
+									$output .= '<p><img src="./assets/not-ok.png" alt="Error"><strong>' . $value . '</strong> failed to process.</p>';
 								}
 								// echo '</div>';
 							}
 							if ($success_log) {
 								foreach ($success_log as $value) {
-									echo '<p><img src="./assets/ok.png" alt="Success"><strong>' . $value['image_file'] . '</strong> is now <strong>' . $value['spread_file'] . '</strong></p><br />';
+									$output .= '<p><img src="./assets/ok.png" alt="Success"><strong>' . $value['image_file'] . '</strong> is now <strong>' . $value['spread_file'] . '</strong></p><br />';
 								}
 								
 							}
@@ -257,9 +239,11 @@ if (isset($_POST['rename-images'])){
 					}
 					else
 					{
-						echo '<h1>Error</h1>';
-						echo '<p>pois.csv is not present in the data folder</p>';
+						$output .= '<h1>Error</h1>';
+						$output .= '<p>pois.csv is not present in the data folder</p>';
 					}
-					echo '</div>';
+					$output .= '</div>';
+					echo $output;
+					$output = '';
 				} ?>
 				<!-- /File renamer -->

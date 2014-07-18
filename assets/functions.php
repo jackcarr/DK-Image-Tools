@@ -38,6 +38,12 @@ function post () {
 	echo '</pre>';
 }
 
+function output ($var) {
+	pre();
+	print_r($var);
+	post();
+}
+
 function br () {
 	echo '<br />';
 }
@@ -92,20 +98,6 @@ function outputImageOverview ($file, $folder) {
 	$output .= '<td class="content">'.$height.'px</td></tr></table>';
 
 	$output .= '</div>';
-
-    // $output .= '<img src=" ' . $file . '" width="' . $new_width . '"/>';
-
-    // $output .= '<div class="clear">';
-    //     $output .= '<div class="left">';
-
-    //     $output .= '</div>';
-    // $output .= '</div>';
-	
-	
-
-
-    // $output .= '<div class="image-info-panel left">';
-    // $output .= '<table class="image-info-panel-table">';
 
 	$output .= '<div class="metadata-table right">';
 
@@ -430,109 +422,97 @@ function divclose () {
 	echo '</div>';
 }
 
-function array_to_html($val) {
-	$do_nothing = true;
 
-        // Get string structure
-	if (is_array($val)) {
-		ob_start();
-		print_r($val);
-		$val = ob_get_contents();
-		ob_end_clean();
+
+function make_thumb($src, $dest, $desired_width) {
+
+	/* read the source image */
+	$source_image = imagecreatefromjpeg($src);
+	$width = imagesx($source_image);
+	$height = imagesy($source_image);
+
+	/* find the "desired height" of this thumbnail, relative to the desired width  */
+	$desired_height = floor($height * ($desired_width / $width));
+
+	/* create a new, "virtual" image */
+	$virtual_image = imagecreatetruecolor($desired_width, $desired_height);
+
+	/* copy source image at a resized size */
+	imagecopyresampled($virtual_image, $source_image, 0, 0, 0, 0, $desired_width, $desired_height, $width, $height);
+
+	/* create the physical thumbnail image to its destination */
+	imagejpeg($virtual_image, $dest);
+}
+
+
+function csv_selector () {
+	$csv_scan_dir = './data/csv';
+	$output = '<select id="poi-file" name="poi-file" onChange="this.form.submit();"';
+
+	if (!isset($_POST['poi-file'])) {
+		$output .= ' class="selector-animation"';
 	}
-
-        // Color counter
-	$current = 0;
-
-        // Split the string into character array
-	$array = preg_split('//', $val, -1, PREG_SPLIT_NO_EMPTY);
-	foreach($array as $char) {
-		if ($char == "[")
-			if (!$do_nothing)
-				echo "</div>";
-			else $do_nothing = false;
-			if ($char == "[")
-				echo "<div>";
-			if ($char == ")") {
-				echo "</div></div>";
-				$current--;
-			}
-			
-			echo $char;
-			
-			if ($char == "(") {
-				echo "<div class='indent' style='padding-left: {$this->indent_size}px; color: ".($this->colors[$current % count($this->colors)]).";'>";
-				$do_nothing = true;
-				$current++;
-			}
-		}
+	else {
+		$output .= ' class="selector"';
 	}
-
-
-	function make_thumb($src, $dest, $desired_width) {
-
-		/* read the source image */
-		$source_image = imagecreatefromjpeg($src);
-		$width = imagesx($source_image);
-		$height = imagesy($source_image);
-
-		/* find the "desired height" of this thumbnail, relative to the desired width  */
-		$desired_height = floor($height * ($desired_width / $width));
-
-		/* create a new, "virtual" image */
-		$virtual_image = imagecreatetruecolor($desired_width, $desired_height);
-
-		/* copy source image at a resized size */
-		imagecopyresampled($virtual_image, $source_image, 0, 0, 0, 0, $desired_width, $desired_height, $width, $height);
-
-		/* create the physical thumbnail image to its destination */
-		imagejpeg($virtual_image, $dest);
-	}
-
-
-	function csv_selector () {
-		$csv_scan_dir = './data/csv';
-		$output = '<select id="poi-file" name="poi-file" onChange="this.form.submit();">';
-		$output .= '<option value="">Select a csv file</option>';
-		if ($csv_handle = opendir ($csv_scan_dir)) {
-			while (($file = readdir($csv_handle)) !== false) {
-				if (!in_array($file, array('.', '..','.DS_Store','.BridgeSort'))) {
-					$output .= '<option value="'.$file.'"';
-					if (isset($_POST['poi-file'])) {
-						if ($_POST['poi-file'] == $file) {
-							$output .= ' selected';
-						}
+	$output .= '>';
+	$output .= '<option value="">Select a csv file or use default pois.csv</option>';
+	if ($csv_handle = opendir ($csv_scan_dir)) {
+		while (($file = readdir($csv_handle)) !== false) {
+			if (!in_array($file, array('.', '..','.DS_Store','.BridgeSort'))) {
+				$output .= '<option value="'.$file.'"';
+				if (isset($_POST['poi-file'])) {
+					if ($_POST['poi-file'] == $file) {
+						$output .= ' selected';
 					}
-					$output .= '>'.$file.'</option>';
 				}
+				$output .= '>'.$file.'</option>';
 			}
 		}
-		$output .= '</select>';
-		return $output;
+	}
+	$output .= '</select>';
+	return $output;
+}
+
+
+
+function folder_selector ($glow) {
+	$scan_dir = './data/';
+	$output = '<select id="folder" name="folder" onChange="this.form.submit();"';
+
+	if ($glow == 'glow') {
+		if (isset($_POST['folder'])) {
+		}
+		else {
+			$output .= ' class="glow';
+		}
+	}
+	else {
+		$output .= '';
 	}
 
+	if ($glow == 'no glow') {
+		$output .= ' border1px';
+	}
 
-
-	function folder_selector () {
-		$scan_dir = './data/';
-		$output = '<select id="folder" name="folder" onChange="this.form.submit();">';
-		$output .= '<option value="">Select a folder</option>';
-		if ($csv_handle = opendir ($scan_dir)) {
-			while (($file = readdir($csv_handle)) !== false) {
-				if (!in_array($file, array('.', '..','.DS_Store','.BridgeSort')) && !is_file($scan_dir.$file)) {
-					$output .= '<option value="'.$file.'"';
-					if (isset($_POST['folder'])) {
-						if ($_POST['folder'] == $file) {
-							$output .= ' selected';
-						}
+	$output .= '">';
+	$output .= '<option value="">Select a folder</option>';
+	if ($csv_handle = opendir ($scan_dir)) {
+		while (($file = readdir($csv_handle)) !== false) {
+			if (!in_array($file, array('.', '..','.DS_Store','.BridgeSort')) && !is_file($scan_dir.$file)) {
+				$output .= '<option value="'.$file.'"';
+				if (isset($_POST['folder'])) {
+					if ($_POST['folder'] == $file) {
+						$output .= ' selected';
 					}
-					$output .= '>'.$file.'</option>';
 				}
+				$output .= '>'.$file.'</option>';
 			}
 		}
-		$output .= '</select>';
-		return $output;
 	}
+	$output .= '</select>';
+	return $output;
+}
 
 
 
@@ -540,47 +520,47 @@ function array_to_html($val) {
 
 
 
-	/* creates a compressed zip file */
-	function create_zip($files = array(), $destination = '', $overwrite = false) {
+/* creates a compressed zip file */
+function create_zip($files = array(), $destination = '', $overwrite = false) {
     //if the zip file already exists and overwrite is false, return false
-		if (file_exists($destination) && !$overwrite) { return false; }
+	if (file_exists($destination) && !$overwrite) { return false; }
     //vars
-		$valid_files = array();
+	$valid_files = array();
     //if files were passed in...
-		if (is_array($files)) {
+	if (is_array($files)) {
         //cycle through each file
-			foreach($files as $file) {
+		foreach($files as $file) {
             //make sure the file exists
-				if (file_exists($file)) {
-					$valid_files[] = $file;
-				}
+			if (file_exists($file)) {
+				$valid_files[] = $file;
 			}
 		}
+	}
     //if we have good files...
-		if (count($valid_files)) {
+	if (count($valid_files)) {
         //create the archive
-			$zip = new ZipArchive();
-			if ($zip->open($destination,$overwrite ? ZIPARCHIVE::OVERWRITE : ZIPARCHIVE::CREATE) !== true) {
-				return false;
-			}
+		$zip = new ZipArchive();
+		if ($zip->open($destination,$overwrite ? ZIPARCHIVE::OVERWRITE : ZIPARCHIVE::CREATE) !== true) {
+			return false;
+		}
         //add the files
-			foreach($valid_files as $file) {
-				$zip->addFile($file,$file);
-			}
+		foreach($valid_files as $file) {
+			$zip->addFile($file,$file);
+		}
         //debug
         //echo 'The zip archive contains ',$zip->numFiles,' files with a status of ',$zip->status;
 
         //close the zip -- done!
-			$zip->close();
+		$zip->close();
 
         //check to make sure the file exists
-			return file_exists($destination);
-		}
-		else
-		{
-			return false;
-		}
+		return file_exists($destination);
 	}
+	else
+	{
+		return false;
+	}
+}
 
 
 
@@ -592,4 +572,4 @@ function array_to_html($val) {
 
 
 
-	?>
+?>

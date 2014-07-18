@@ -7,19 +7,33 @@
 		<h3>Asset Library string generator</h3>
 
 		<?php
+
+		if (is_array($csv) && count ($csv) > 0) {
 			$al_string = '';
-				$spread_array = parseCsv($csv_path);
-				foreach ($spread_array as $key => $value) {
-					if (substr($value['number'],0,2) == 'AL' && $value['source'] == 'dk') {
+				$csv = parseCsv($csv_path);
+				foreach ($csv as $key => $value) {
+					//
+					// Check if the CSV is a proper POI Images file
+					//
+					if (!isset($value['number'])) {
+						$output .= '<div class="error">';
+						$output .= 'This CSV does not contain a <strong>number</strong> field.';
+						$output .= '</div>';
+						break;
+					}
+					elseif (substr($value['number'],0,2) == 'AL' && $value['source'] == 'dk') {
 						$al_string .= $value['number'] . ' OR ';
 					}
 				}
 
-			echo '<textarea cols="182" rows="10" onclick="this.select();">';
+			$output .= '<textarea cols="182" rows="10" onclick="this.select();">';
 			if (isset($_POST['asset-numbers'])) {
-				echo preg_replace("/OR\z/", '', trim($al_string));
+				$output .= preg_replace("/OR\z/", '', trim($al_string));
 			}
-			echo '</textarea>';
+			$output .= '</textarea>';
+		}
+		echo $output;
+		$output = '';
 		?><br />
 		<!-- <button type="submit">Generate string</button> -->
 	</div>

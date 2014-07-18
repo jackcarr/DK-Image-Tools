@@ -23,7 +23,7 @@
  	display: block;
  }
 
- .none {
+ .none, .hidden {
  	display: none;
  }
  .inset {
@@ -63,7 +63,6 @@ margin: .8em 0 0 0;
   width: 100%;
   border: 1px solid darkgrey;
   padding: 0 1em 1em 1em;
-  /*background: url('../assets/bg.png');*/
 }
 
   .image-thumbnail-panel {
@@ -72,7 +71,6 @@ margin: .8em 0 0 0;
 
 
   .image-info-panel {
-    /*width: 60%;*/
     display: inline-block;
     padding-left: 1em;
   }
@@ -142,22 +140,6 @@ margin: .8em 0 0 0;
   .invisible {
     display:none;
   }
-/*div#debug {
-  position: fixed;
-  top: 8.4em;
-  left: 1em;
-  background: black;
-  color: white;
-  padding: 1em;
-  width: 23em;
-  }*/
-/*button#debug-mode {
-  background: white;
-  color: black;
-  height: 1em;
-  line-height: 0em;
-  margin-left: 4em;
-  }*/
 
   div.message {
     position: absolute;
@@ -567,33 +549,96 @@ margin: .8em 0 0 0;
   	-webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, .05), 0 1px 0 rgba(255, 255, 255, .1);
   	box-shadow: inset 0 1px 3px rgba(0, 0, 0, .05), 0 1px 0 rgba(255, 255, 255, .1);
   }
-  /*# sourceMappingURL=bootstrap-theme.css.map */
-
-
-
-/*
-#dropdown { 
-    margin: 10px;
-    padding: 10px; 
-    border: 2px solid purple; 
-    width: 200px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-}
-#dropdown > ul { display: none; }
-#dropdown:hover > ul {display: block; background: #f9f9f9; border-top: 1px solid purple;}
-#dropdown:hover > ul > li { padding: 5px; border-bottom: 1px solid #4f4f4f;}
-#dropdown:hover > ul > li:hover { background: white;}
-#dropdown:hover > ul > li:hover > a { color: red; }
-
-
-
-
-*/
+  
 
 div.white-box {
 	display: inline-block;
+}
+
+ 
+.gl  ow {
+background-color: #cce;
+-webkit-animation-name: glow;
+-webkit-animation-duration: 1s;
+-webkit-animation-iteration-count: infinite;
+-webkit-animation-direction: alternate;
+-webkit-animation-timing-function: ease-in-out;
+-moz-animation-name: glow;
+-moz-animation-duration: 1s;
+-moz-animation-iteration-count: infinite;
+-moz-animation-direction: alternate;
+-moz-animation-timing-function: ease-in-out;
+-o-animation-name: glow;
+-o-animation-duration: 1s;
+-o-animation-iteration-count: infinite;
+-o-animation-direction: alternate;
+-o-animation-timing-function: ease-in-out;
+animation-name: glow;
+animation-duration: 1s;
+animation-iteration-count: infinite;
+animation-direction: alternate;
+animation-timing-function: ease-in-out;
+}
+
+@-webkit-keyframes glow {
+  0% {
+    -webkit-box-shadow: 0 0 50px 1px rgba(255, 0, 0, 0.5);
+  }
+  100% {
+    -webkit-box-shadow: 0 0 50px 1px rgba(255, 0, 0, 1.0), 0 0 36px rgba(255, 167, 0, 1.0);
+  }
+}
+@-moz-keyframes glow {
+  0% {
+    -moz-box-shadow: 0 0 50px 1px rgba(255, 0, 0, 0.5);
+  }
+  100% {
+    -moz-box-shadow: 0 0 50px 1px rgba(255, 0, 0, 1.0), 0 0 36px rgba(255, 167, 0, 1.0);
+  }
+}
+@-o-keyframes glow {
+  0% {
+    box-shadow: 0 0 50px 1px rgba(255, 0, 0, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 50px 1px rgba(255, 0, 0, 1.0), 0 0 36px rgba(255, 167, 0, 1.0);
+  }
+}
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 50px 1px rgba(255, 0, 0, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 50px 1px rgba(255, 0, 0, 1.0), 0 0 36px rgba(255, 167, 0, 1.0);
+  }
+}
+
+
+.glow  {
+  background-color:#cce;
+  -webkit-animation-name: glow;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-timing-function: ease-in-out;
+
+  -moz-animation-name: glow;
+  -moz-animation-duration: 1s;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-direction: alternate;
+  -moz-animation-timing-function: ease-in-out;
+
+  -o-animation-name: glow;
+  -o-animation-duration: 1s;
+  -o-animation-iteration-count: infinite;
+  -o-animation-direction: alternate;
+  -o-animation-timing-function: ease-in-out;
+
+  animation-name: glow;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-timing-function: ease-in-out;
 }
 
 .split-table {
@@ -610,6 +655,10 @@ div.white-box {
 	color: black;
 	padding: 5px;
 	border-radius: 0;
+}
+
+select#folder {
+border: 1px solid black!important;
 }
 
 .tools select.balck {

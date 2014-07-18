@@ -25,7 +25,7 @@
 			// If csv file is set, list all local files which are eligible for processing
 			// This should replace each tool's built-in csv parser?
 
-		// if (isset($_POST['csv_path']) && $_POST['csv_path']!== '') {
+		if (isset($_POST['csv_path']) && $_POST['csv_path']!== '') {
 			$csv_array = parseCsv ($csv_path);
 
 			$output .= '<table><tr><td><button name="process">Process</button></td><td><label for="selectall">Select all&nbsp;</label><input type="checkbox" id="selectall"></td></tr>';
@@ -51,7 +51,7 @@
 			$output .= '<br /><button name="process">Process</button>';
 
 				// echo $output;
-		// }
+		}
 
 
 		include 'string-generator.php';
